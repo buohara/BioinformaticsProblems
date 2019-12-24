@@ -20,3 +20,5 @@ struct TestResult
 
 void P2_1(vector<TestResult> &testResults);
 void P2_18(vector<TestResult>& testResults);
+
+void P4_2(vector<TestResult>& testResults);

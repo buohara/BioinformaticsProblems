@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClCompile Include="src\ch2\p2_1.cpp" />
     <ClCompile Include="src\ch2\p2_18.cpp" />
+    <ClCompile Include="src\ch4\p4_2.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>

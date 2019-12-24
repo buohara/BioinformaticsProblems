@@ -9,6 +9,7 @@ map<string, pfnProblem> problems =
 {
     { "P2_1", P2_1 },
     { "P2_18", P2_18 },
+    { "P4_2", P4_2 },
 };
 
 /**

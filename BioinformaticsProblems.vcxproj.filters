@@ -12,6 +12,9 @@
     <Filter Include="src\ch2">
       <UniqueIdentifier>{315a3db9-f6ac-40d9-9c97-26aac7f79ac2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\ch4">
+      <UniqueIdentifier>{e0adf11c-6975-44ad-a002-f82c5cd3dea0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -22,6 +25,9 @@
     </ClCompile>
     <ClCompile Include="src\ch2\p2_18.cpp">
       <Filter>src\ch2</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ch4\p4_2.cpp">
+      <Filter>src\ch4</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
