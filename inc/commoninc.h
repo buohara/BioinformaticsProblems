@@ -11,8 +11,11 @@
 #include <algorithm>
 #include <set>
 
+#include <Windows.h>
+
 enum ResultCode
 {
-    OK              = 0,
-    INVALID_INPUT   = 1
+    OK                          = 0,
+    INVALID_INPUT               = 1,
+    UNABLE_TO_FIND_SOLUTION     = 2
 };

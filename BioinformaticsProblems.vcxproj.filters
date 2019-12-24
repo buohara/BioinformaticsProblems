@@ -29,12 +29,18 @@
     <ClCompile Include="src\ch4\p4_2.cpp">
       <Filter>src\ch4</Filter>
     </ClCompile>
+    <ClCompile Include="src\utils.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\problems.h">
       <Filter>inc</Filter>
     </ClInclude>
     <ClInclude Include="inc\commoninc.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\utils.h">
       <Filter>inc</Filter>
     </ClInclude>
   </ItemGroup>

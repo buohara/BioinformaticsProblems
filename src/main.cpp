@@ -94,6 +94,8 @@ int main(int argc, char** argv)
     vector<string> args(argv + 1, argv + argc);
     vector<TestResult> results;
 
+    srand((uint32_t)time(NULL));
+
     for (auto& prob : args)
     {
         if (problems.count(prob) == 0) printf("Unknown problem specified: %s\n\n", prob.c_str());

@@ -131,10 +131,12 @@
     <ClCompile Include="src\ch2\p2_18.cpp" />
     <ClCompile Include="src\ch4\p4_2.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\commoninc.h" />
     <ClInclude Include="inc\problems.h" />
+    <ClInclude Include="inc\utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
