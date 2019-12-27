@@ -104,28 +104,77 @@ static ResultCode ComputePDBF(const vector<uint32_t>& distList, vector<uint32_t>
     return UNABLE_TO_FIND_SOLUTION;
 }
 
-/**
- * IsSubset - Determine if s1 is a subset of s2. Assumes s1 and s2 are sorted in ascending
- * order.
- *
- * @param  s1 First set. Elements assumed to be in ascending order.
- * @param  s2 Second set. Elements assumed to be in ascending order.
- *
- * @return    True if s1 is a subset of s2.
- */
-
-static bool IsSubset(const vector<uint32_t>& s1, const vector<uint32_t>& s2)
+static bool SearchDistListRecursive(set<uint32_t>& pd, set<uint32_t>& dist)
 {
-    if (s1.size() == 0) return true;
-    if (s1.size() > s2.size()) return false;
+    if (dist.size() == 0)
+        return true;
 
-    uint32_t found = 0;
+    const uint32_t maxDist  = *pd.rbegin();
 
-    for (uint32_t i = 0; i < s2.size(); i++)
-        if (s1[found] == s2[i])
-            found++;
+    for (auto rit = dist.rbegin(); rit != dist.rend(); rit++)
+    {
+        uint32_t curMax     = *rit;
+        uint32_t left       = curMax;
+        uint32_t right      = maxDist - curMax;
 
-    if (found == s1.size()) return true;
+        bool leftValid      = true;
+        bool rightValid     = true;
+
+        vector<uint32_t> newDistList;
+
+        for (auto& pt : pd)
+        {
+            uint32_t newDist = pt > left ? pt - left : left - pt;
+            if (dist.count(newDist) == 0)
+            {
+                leftValid = false;
+                break;
+            }
+            newDistList.push_back(newDist);
+        }
+
+        if (leftValid)
+        {
+            pd.insert(left);
+            for (auto& newDist : newDistList) dist.erase(newDist);
+            if (SearchDistListRecursive(pd, dist)) return true;
+            else
+            {
+                pd.erase(left);
+                for (auto& newDist : newDistList) dist.insert(newDist);
+                leftValid = false;
+            }
+        }
+
+        if (!leftValid)
+        {
+            newDistList.resize(0);
+
+            for (auto& pt : pd)
+            {
+                uint32_t newDist = pt > right ? pt - right : right - pt;
+                if (dist.count(newDist) == 0)
+                {
+                    rightValid = false;
+                    break;
+                }
+                newDistList.push_back(newDist);
+            }
+
+            if (rightValid)
+            {
+                pd.insert(right);
+                for (auto& newDist : newDistList) dist.erase(newDist);
+                if (SearchDistListRecursive(pd, dist)) return true;
+                else
+                {
+                    pd.erase(right);
+                    for (auto& newDist : newDistList) dist.insert(newDist);
+                }
+            }
+        }
+    }
+
     return false;
 }
 
@@ -142,10 +191,10 @@ static bool IsSubset(const vector<uint32_t>& s1, const vector<uint32_t>& s2)
  * so back up and check previous distances. Algorithm terminates if a computed distance set matches the input
  * list, or all combinations of points have been tested and no solution found.
  *
- * @param  list [in] Input set of pairwise distances between points. Assumed to be sorted in ascending order.
- * @param  pd   [in/out] The computed set of points PD from L. Assumed empty on input.
+ * @param  distSetIn    [in] Input set of pairwise distances between points. Assumed to be sorted in ascending order.
+ * @param  pd           [in/out] The computed set of points PD from L. Assumed empty on input.
  *
- * @return      INVALID_INPUT if no distances input. OK if solution found, UNABLE_TO_FIND_SOLUTION otherwise.
+ * @return              INVALID_INPUT if no distances input. OK if solution found, UNABLE_TO_FIND_SOLUTION otherwise.
  */
 
 static ResultCode ComputePDBacktracking(const vector<uint32_t>& distList, vector<uint32_t>& pd)
@@ -153,74 +202,21 @@ static ResultCode ComputePDBacktracking(const vector<uint32_t>& distList, vector
     assert(pd.size() == 0);
     if (distList.size() == 0) return INVALID_INPUT;
 
-    const uint32_t distMax = distList[distList.size() - 1];
+    set<uint32_t> distSet;
+    set<uint32_t> pdSet;
 
-    struct SearchNode
+    const uint32_t maxDist = distList[distList.size() - 1];
+    pdSet.insert(0);
+    pdSet.insert(maxDist);
+
+    for (uint32_t i = 0; i < distList.size() - 1; i++) distSet.insert(distList[i]);
+
+    if (SearchDistListRecursive(pdSet, distSet))
     {
-        uint32_t curPoint;
-        int32_t nextIdx;
-        bool searchedLeft;
-        bool searchedRight;
-    };
+        for (auto& pt : pdSet) pd.push_back(pt);
+        sort(pd.begin(), pd.end());
 
-    vector<SearchNode> searchStack;
-    searchStack.push_back({ distMax, (int32_t)distList.size() - 2, false, false });
-
-    while (!searchStack.empty())
-    {
-        auto& cur = searchStack.back();
-
-        if (cur.searchedLeft == false && cur.searchedRight == false)
-        {
-            vector<uint32_t> pdCand = { 0, distMax };
-            for (uint32_t i = 1; i < searchStack.size(); i++) pdCand.push_back(searchStack[i].curPoint);
-            sort(pdCand.begin(), pdCand.end());
-
-            vector<uint32_t> candDist;
-            GetPairwiseDistances(pdCand, candDist);
-
-            if (!IsSubset(candDist, distList))
-            {
-                searchStack.pop_back();
-                continue;
-            }
-            else
-            {
-                if (candDist.size() == distList.size())
-                {
-                    pd.resize(pdCand.size());
-                    memcpy(&pd[0], &pdCand[0], pdCand.size() * sizeof(uint32_t));
-                    return OK;
-                }
-            }
-        }
-
-        while (cur.nextIdx >= 0)
-        {
-            if (cur.searchedLeft == false)
-            {
-                cur.searchedLeft = true;
-                searchStack.push_back({ distMax - distList[cur.nextIdx], cur.nextIdx - 1, false, false });
-                break;
-            }
-
-            else if (cur.searchedRight == false)
-            {
-                cur.searchedRight = true;
-                searchStack.push_back( {distList[cur.nextIdx], cur.nextIdx - 1, false, false });
-                break;
-            }
-
-            else
-            {
-                cur.nextIdx--;
-                cur.searchedLeft    = false;
-                cur.searchedRight   = false;
-            }
-        }
-
-        if (cur.nextIdx == -1)
-            searchStack.pop_back();
+        return OK;
     }
 
     return UNABLE_TO_FIND_SOLUTION;
@@ -247,6 +243,11 @@ void P4_2(vector<TestResult>& testResults)
     const uint32_t maxVal       = 10000;
 
     uint32_t testCase = 0;
+
+    vector<uint32_t> testList = { 2, 2, 3, 3, 4, 5, 6, 7, 8, 10 };
+    vector<uint32_t> pd;
+
+    ComputePDBacktracking(testList, pd);
 
     for (uint32_t i = 2; i <= maxListSize; i *= 2)
     {
