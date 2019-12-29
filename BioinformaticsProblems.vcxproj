@@ -127,9 +127,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\ch2\p2_1.cpp" />
-    <ClCompile Include="src\ch2\p2_18.cpp" />
-    <ClCompile Include="src\ch4\p4_2.cpp" />
+    <ClCompile Include="src\ch2\minmax.cpp" />
+    <ClCompile Include="src\ch2\honestprofessors.cpp" />
+    <ClCompile Include="src\ch4\motiffinding.cpp" />
+    <ClCompile Include="src\ch4\restrictionmapping.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\utils.cpp" />
   </ItemGroup>

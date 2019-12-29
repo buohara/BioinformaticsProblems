@@ -108,7 +108,7 @@ static void DetermineHonestProfessors(Professors& profs, bool honest[PROFCNT])
 }
 
 /**
- * P2_18 - Honest/deceitful professor problem test. Randomly generate 100 professors with
+ * HonestProfessors - Honest/deceitful professor problem test. Randomly generate 100 professors with
  * different honesties/dishonesties, then run the solution algorithm. Test passes if algorithm
  * correctly determines the honest professors in 198 queries or less. Fails if result is incorrect
  * or uses too many queries.
@@ -116,7 +116,7 @@ static void DetermineHonestProfessors(Professors& profs, bool honest[PROFCNT])
  * @param testResults [in/out] Test result list to append to.
  */
 
-void P2_18(vector<TestResult>& testResults)
+void HonestProfessors(vector<TestResult>& testResults)
 {
     const uint32_t numIters = 1000;
 

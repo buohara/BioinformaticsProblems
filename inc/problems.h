@@ -19,7 +19,8 @@ struct TestResult
     string testMsg;
 };
 
-void P2_1(vector<TestResult> &testResults);
-void P2_18(vector<TestResult>& testResults);
+void GetMinMax(vector<TestResult> &testResults);
+void HonestProfessors(vector<TestResult>& testResults);
 
-void P4_2(vector<TestResult>& testResults);
+void RestrictionMapping(vector<TestResult>& testResults);
+void MotifFinding(vector<TestResult>& testResults);

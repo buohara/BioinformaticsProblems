@@ -244,7 +244,7 @@ static ResultCode ComputePDBacktracking(const vector<uint32_t>& distList, vector
 }
 
 /**
- * P4_2 - Restriction mapping problems. The restriction mapping/turnpike problem asks, given
+ * RestrictionMapping - Restriction mapping problems. The restriction mapping/turnpike problem asks, given
  * a list of pairwise distances between points, can we reconstruct the original set of points.
  * This routine tests a backtracking technique (see ComputePDBackTracking above).
  * 
@@ -258,7 +258,7 @@ static ResultCode ComputePDBacktracking(const vector<uint32_t>& distList, vector
  * @param testResults Result list to append results to.
  */
 
-void P4_2(vector<TestResult>& testResults)
+void RestrictionMapping(vector<TestResult>& testResults)
 {
     const uint32_t itersPerSize = 100;
     const uint32_t maxListSize  = 256;

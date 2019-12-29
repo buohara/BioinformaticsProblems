@@ -188,13 +188,13 @@ static void TestRandomLists(vector<TestResult> & testResults)
 }
 
 /**
- * P2_1 - Run tests of algorithm that gets min and max of an unsorted input list. First, run
+ * GetMinMax - Run tests of algorithm that gets min and max of an unsorted input list. First, run
  * a few specific corner cases, then run random lists of random lengths.
  *
  * @param testResults [in/out] List to append test results to.
  */
 
-void P2_1(vector<TestResult>& testResults)
+void GetMinMax(vector<TestResult>& testResults)
 {
     TestLengthZeroList(testResults);
     TestLengthOneList(testResults);
