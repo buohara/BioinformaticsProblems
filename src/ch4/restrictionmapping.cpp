@@ -104,6 +104,15 @@ static ResultCode ComputePDBF(const vector<uint32_t>& distList, vector<uint32_t>
     return UNABLE_TO_FIND_SOLUTION;
 }
 
+/* 
+ * Performance optimization. For recursive restriction mapping algorithm below, every time a distance
+ * grabbed from the remaining distance list, at most, N new distances can be generated, where N is the
+ * size of the final solution (N points generates N * (N - 1) distances). Allocate room for these
+ * distances up front and don't dynamically allocate new memory for new distances on-the-fly.
+ */
+
+static uint32_t solutionSize;
+
 /**
  * SearchDistListResursive - This algorithm iteratively grabs the largest unused distance D from 
  * the input list L and computes points that are D from the left/or right ends of PD
@@ -137,6 +146,8 @@ static bool SearchDistListRecursive(set<uint32_t>& pd, unordered_map<uint32_t, u
 
     const uint32_t maxDist = *pd.rbegin();
 
+    vector<uint32_t> newDistList(solutionSize);
+
     for (auto &pair : dist)
     {
         uint32_t curMax     = pair.first;
@@ -146,7 +157,7 @@ static bool SearchDistListRecursive(set<uint32_t>& pd, unordered_map<uint32_t, u
         bool leftValid      = true;
         bool rightValid     = true;
 
-        vector<uint32_t> newDistList;
+        uint32_t newDistCnt = 0;
 
         for (auto& pt : pd)
         {
@@ -156,25 +167,25 @@ static bool SearchDistListRecursive(set<uint32_t>& pd, unordered_map<uint32_t, u
                 leftValid = false;
                 break;
             }
-            newDistList.push_back(newDist);
+            newDistList[newDistCnt++] = newDist;
         }
 
         if (leftValid)
         {
             pd.insert(left);
-            for (auto& newDist : newDistList) dist[newDist]--;
+            for (uint32_t i = 0; i < newDistCnt; i++) dist[newDistList[i]]--;
             if (SearchDistListRecursive(pd, dist)) return true;
             else
             {
                 pd.erase(left);
-                for (auto& newDist : newDistList) dist[newDist]++;
+                for (uint32_t i = 0; i < newDistCnt; i++) dist[newDistList[i]]++;
                 leftValid = false;
             }
         }
 
         if (!leftValid)
         {
-            newDistList.resize(0);
+            newDistCnt = 0;
 
             for (auto& pt : pd)
             {
@@ -184,18 +195,18 @@ static bool SearchDistListRecursive(set<uint32_t>& pd, unordered_map<uint32_t, u
                     rightValid = false;
                     break;
                 }
-                newDistList.push_back(newDist);
+                newDistList[newDistCnt++] = newDist;
             }
 
             if (rightValid)
             {
                 pd.insert(right);
-                for (auto& newDist : newDistList) dist[newDist]--;
+                for (uint32_t i = 0; i < newDistCnt; i++) dist[newDistList[i]]--;
                 if (SearchDistListRecursive(pd, dist)) return true;
                 else
                 {
                     pd.erase(right);
-                    for (auto& newDist : newDistList) dist[newDist]++;
+                    for (uint32_t i = 0; i < newDistCnt; i++) dist[newDistList[i]]++;
                 }
             }
         }
@@ -232,6 +243,10 @@ static ResultCode ComputePDBacktracking(const vector<uint32_t>& distList, vector
         else distSet[distList[i]]++;
     }
 
+    uint32_t i = 2;
+
+    while (i * (i - 1) / 2 != (uint32_t)distList.size()) solutionSize = ++i;
+
     if (SearchDistListRecursive(pdSet, distSet))
     {
         for (auto& pt : pdSet) pd.push_back(pt);
@@ -260,7 +275,7 @@ static ResultCode ComputePDBacktracking(const vector<uint32_t>& distList, vector
 
 void RestrictionMapping(vector<TestResult>& testResults)
 {
-    const uint32_t itersPerSize = 100;
+    const uint32_t itersPerSize = 1;
     const uint32_t maxListSize  = 256;
     const uint32_t maxVal       = 10000;
 
