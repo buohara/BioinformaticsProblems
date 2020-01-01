@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="reversaldistance.cpp" />
     <ClCompile Include="src\ch2\minmax.cpp" />
     <ClCompile Include="src\ch2\honestprofessors.cpp" />
     <ClCompile Include="src\ch4\motiffinding.cpp" />

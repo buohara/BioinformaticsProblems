@@ -222,8 +222,9 @@ ResultCode FindMotif(const vector<string>& seqs, const uint32_t motifLen, vector
 }
 
 /**
- * [MotifFinding description]
- * @param testResults [description]
+ * MotifFinding - Test routine for motif finding algorithm above.
+ *
+ * @param testResults List of test results to append to.
  */
 
 void MotifFinding(vector<TestResult>& testResults)

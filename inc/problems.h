@@ -24,3 +24,4 @@ void HonestProfessors(vector<TestResult>& testResults);
 
 void RestrictionMapping(vector<TestResult>& testResults);
 void MotifFinding(vector<TestResult>& testResults);
+void ReversalDistance(vector<TestResult>& testResults);

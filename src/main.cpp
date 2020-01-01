@@ -10,7 +10,8 @@ map<string, pfnProblem> problems =
     { "GetMinMax", GetMinMax },
     { "HonestProfessors", HonestProfessors },
     { "RestrictionMapping", RestrictionMapping },
-    { "MotifFinding", MotifFinding }
+    { "MotifFinding", MotifFinding },
+    { "ReversalDistance", ReversalDistance },
 };
 
 /**

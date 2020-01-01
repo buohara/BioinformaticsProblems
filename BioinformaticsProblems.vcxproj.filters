@@ -15,6 +15,9 @@
     <Filter Include="src\ch4">
       <UniqueIdentifier>{e0adf11c-6975-44ad-a002-f82c5cd3dea0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\ch5">
+      <UniqueIdentifier>{36c1acd1-28b3-48cd-aeb2-971ef7762dba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -34,6 +37,9 @@
     </ClCompile>
     <ClCompile Include="src\ch4\motiffinding.cpp">
       <Filter>src\ch4</Filter>
+    </ClCompile>
+    <ClCompile Include="reversaldistance.cpp">
+      <Filter>src\ch5</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
